@@ -1,25 +1,27 @@
-import os
-
-from dotenv import load_dotenv
-
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
-load_dotenv(os.path.join(BASEDIR, '.env'))
+from pydantic import BaseSettings, root_validator
 
 
-POSTGRES_DB_NAME = os.environ.get('POSTGRES_DB_NAME')
-POSTGRES_HOST = os.environ.get('POSTGRES_HOST')
-POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
-POSTGRES_USER = os.environ.get('POSTGRES_USER')
-POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
+class Settings(BaseSettings):
+    POSTGRES_DB_NAME: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
 
-# SECRET = os.environ.get('SECRET')
-# PASSWORD = os.environ.get('PASSWORD')
+    # @root_validator
+    # def get_database_url(cls, values):
+    #     values['DATABASE_URL'] = (f'postgresql+asyncpg://{values["POSTGRES_USER"]}:{values["POSTGRES_PASSWORD"]}'
+    #             f'@{values["POSTGRES_HOST"]}:{values["POSTGRES_PORT"]}/{values["POSTGRES_DB_NAME"]}')
+    #     return values
 
-# SMTP_USER = os.environ.get('SMTP_USER')
-# SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD')
-# SMTP_HOST = os.environ.get('SMTP_HOST')
-# SMTP_PORT = os.environ.get('SMTP_PORT')
+    @property
+    def DATABASE_URL(self):
+        return (f'postgresql+asyncpg://{self.POSTGRES_USER}:'
+                f'{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:'
+                f'{self.POSTGRES_PORT}/{self.POSTGRES_DB_NAME}')
 
-# REDIS_HOST = os.environ.get('REDIS_HOST')
-# REDIS_PORT = os.environ.get('REDIS_PORT')
+    class Config:
+        env_file = 'app/.env'
+
+
+settings = Settings()
