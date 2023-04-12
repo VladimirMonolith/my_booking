@@ -1,0 +1,4 @@
+fastapi[all]
+SQLAlchemy==2.0.9
+alembic==1.10.3
+asyncpg==0.27.0
