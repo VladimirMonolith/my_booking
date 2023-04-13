@@ -2,6 +2,8 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    """Класс для работы с переменными окружения."""
+
     POSTGRES_DB_NAME: str
     POSTGRES_HOST: str
     POSTGRES_PORT: int
