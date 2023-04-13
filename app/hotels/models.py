@@ -14,8 +14,8 @@ class Hotel(Base):
     __tablename__ = 'hotels'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, nullable=False)
-    name: Mapped[str] = mapped_column(String(length=50), nullable=False)
-    location: Mapped[str] = mapped_column(String(length=50), nullable=False)
+    name: Mapped[str] = mapped_column(String(length=150), nullable=False)
+    location: Mapped[str] = mapped_column(String(length=300), nullable=False)
     services: Mapped[Optional[str]] = mapped_column(JSON, nullable=True)
     rooms_quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     image_id: Mapped[Optional[str]] = mapped_column(Integer, nullable=True)

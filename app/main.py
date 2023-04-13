@@ -5,9 +5,14 @@ from typing import Optional
 
 from fastapi import Depends, FastAPI, Query
 
+from app.bookings.router import router as bookings_router
+
 # from pydantic import BaseModel, Field
 
 app = FastAPI(title='project')
+
+app.include_router(bookings_router)
+
 
 
 @dataclass
@@ -21,7 +26,7 @@ class Test:
 async def test(
     test: Test = Depends()
 ):
-    return 'Cjctn'
+    return 'Test'
 
 
 # if __name__ == '__main__':
