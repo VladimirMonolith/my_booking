@@ -7,6 +7,8 @@ from app.database.connection import async_session_maker
 
 
 class BaseDAO:
+    """Класс для работы с объетами БД."""
+
     model = None
 
     @classmethod
