@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, root_validator
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -7,12 +7,6 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-
-    # @root_validator
-    # def get_database_url(cls, values):
-    #     values['DATABASE_URL'] = (f'postgresql+asyncpg://{values["POSTGRES_USER"]}:{values["POSTGRES_PASSWORD"]}'
-    #             f'@{values["POSTGRES_HOST"]}:{values["POSTGRES_PORT"]}/{values["POSTGRES_DB_NAME"]}')
-    #     return values
 
     @property
     def DATABASE_URL(self):
