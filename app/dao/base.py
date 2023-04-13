@@ -7,7 +7,7 @@ from app.database.connection import async_session_maker
 
 
 class BaseDAO:
-    """Класс для работы с объетами БД."""
+    """Класс для работы с объектами БД."""
 
     model = None
 
@@ -27,7 +27,7 @@ class BaseDAO:
             return object
 
     @classmethod
-    async def get_all_objects(cls, **kwargs):
+    async def get_all_objects_or_404(cls, **kwargs):
         """Возвращает все объекты модели или 404 ошибку."""
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**kwargs)

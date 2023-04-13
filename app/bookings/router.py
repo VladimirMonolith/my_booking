@@ -1,13 +1,9 @@
 from typing import List
-from fastapi import APIRouter, Depends
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import BookingRead
-from app.database.connection import get_async_session
 
-from .models import Booking
+from fastapi import APIRouter
+
 from .dao import BookingDAO
-
+from .schemas import BookingRead
 
 router = APIRouter(
     prefix='/bookings',
@@ -17,9 +13,7 @@ router = APIRouter(
 @router.get('', response_model=List[BookingRead])
 async def get_bookings():
     """Возвращает все бронирования."""
-    return await BookingDAO.get_all_objects()
-
-    
+    return await BookingDAO.get_all_objects_or_404()
 
 
 @router.get('/{booking_id}', response_model=BookingRead)

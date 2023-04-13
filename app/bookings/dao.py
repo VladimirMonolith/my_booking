@@ -5,4 +5,3 @@ from .models import Booking
 
 class BookingDAO(BaseDAO):
     model = Booking
-

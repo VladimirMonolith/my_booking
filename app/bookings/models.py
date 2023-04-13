@@ -1,9 +1,7 @@
 from datetime import datetime
-from typing import List, Optional
 
-from sqlalchemy import JSON, TIMESTAMP, Boolean, Computed, ForeignKey, Integer, String, Date
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy import Computed, Date, ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.db import Base
 
@@ -26,4 +24,3 @@ class Booking(Base):
     )
     room_id: Mapped[int] = mapped_column(ForeignKey('rooms.id'))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    
