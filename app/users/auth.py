@@ -35,6 +35,5 @@ async def authenticate_user(email: EmailStr, password: str):
     """Аутентифицирует пользователя."""
     user = await UserDAO.get_object(email=email)
 
-    if not (user and verify_password(password, user.hashed_password)):
-        return None
-    return user
+    if user and verify_password(password, user.hashed_password):
+        return user

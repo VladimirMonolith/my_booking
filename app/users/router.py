@@ -34,17 +34,15 @@ async def register_user(user_data: UserAuth):
 @router.post('/login')
 async def login_user(response: Response, user_data: UserAuth):
     """Позволяет пользователю аутентифицироваться."""
-    user = await authenticate_user(email=user_data.email, password=user_data.password) 
-
-    # user = await authenticate_user(**user_data)
+    user = await authenticate_user(
+        email=user_data.email, password=user_data.password
+    )
 
     if not user:
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED,
             detail='Проверьте введенные данные или зарегистрируйтесь'
         )
-    
     access_token = create_access_token({'sub': user.id})
-    response.set_cookie('my_booking_access_token', access_token)
-    return access_token
-
+    response.set_cookie('my_booking_access_token', access_token, httponly=True)
+    return {'access_token': access_token}
