@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserAuth(BaseModel):
-    """Модель регистрации пользователя."""
+    """Модель регистрации и аутентификации пользователя."""
 
     email: EmailStr
     password: str
