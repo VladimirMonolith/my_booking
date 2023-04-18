@@ -11,19 +11,19 @@ class BaseDAO:
 
     model = None
 
-    @classmethod
-    async def get_object_or_404(cls, **kwargs):
-        """Возвращает объект модели или 404 ошибку."""
-        async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**kwargs)
-            result = await session.execute(query)
-            return result.scalar_one_or_none()
+    # @classmethod
+    # async def get_object_or_404(cls, **kwargs):
+    #     """Возвращает объект модели или 404 ошибку."""
+    #     async with async_session_maker() as session:
+    #         query = select(cls.model).filter_by(**kwargs)
+    #         result = await session.execute(query)
+    #         return result.scalar_one_or_none()
 
-            # if not object:
-            #     raise HTTPException(
-            #         status_code=HTTPStatus.NOT_FOUND,
-            #         detail='Запрошенный объект не найден.'
-            #     )
+    #         if not object:
+    #             raise HTTPException(
+    #                 status_code=HTTPStatus.NOT_FOUND,
+    #                 detail='Запрошенный объект не найден.'
+    #             )
             
 
     @classmethod
@@ -40,14 +40,8 @@ class BaseDAO:
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**kwargs)
             result = await session.execute(query)
-            objects = result.scalars().all()
+            return result.scalars().all()
 
-            # if not objects:
-            #     raise HTTPException(
-            #         status_code=HTTPStatus.NOT_FOUND,
-            #         detail='Данные не найдены.'
-            #     )
-            return objects
 
     @classmethod
     async def add_objects(cls, **kwargs):

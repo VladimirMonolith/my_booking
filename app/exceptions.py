@@ -29,3 +29,8 @@ TokenInvalidDataException = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Сессия некорректна. Переданные данные некорректны.'
 )
+
+RoomCantBookedException = HTTPException(
+    status_code=status.HTTP_409_CONFLICT,
+    detail='Свободных комнат не осталось.'
+)
