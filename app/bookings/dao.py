@@ -1,14 +1,11 @@
 from datetime import date
 
-from fastapi import Depends
 from sqlalchemy import and_, func, insert, or_, select
 
 from app.dao.base import BaseDAO
 from app.database.connection import async_session_maker
 from app.exceptions import RoomCantBookedException
 from app.rooms.models import Room
-from app.users.dependencies import get_current_user
-from app.users.models import User
 
 from .models import Booking
 

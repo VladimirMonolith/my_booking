@@ -42,12 +42,13 @@ async def get_user_bookings(user: User = Depends(get_current_user)):
 
 @router.get('/{booking_id}', response_model=BookingRead)
 async def get_booking(booking_id: int):
-    """Возвращает конкретное бронирование."""
+    """Возвращает бронирование по id."""
     booking = await BookingDAO.get_object(id=booking_id)
 
     if not booking:
         raise NotFoundException
     return booking
+
 
 @router.delete('/{booking_id}')
 async def delete_booking(

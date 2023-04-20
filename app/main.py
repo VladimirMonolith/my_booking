@@ -2,9 +2,9 @@
 from fastapi import FastAPI
 
 from app.bookings.router import router as bookings_router
-from app.users.router import router as users_router
 from app.hotels.router import router as hotels_router
 from app.rooms.router import router as rooms_router
+from app.users.router import router as users_router
 
 app = FastAPI(title='my_booking')
 

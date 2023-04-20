@@ -1,7 +1,4 @@
-from http import HTTPStatus
-
-from fastapi import HTTPException
-from sqlalchemy import select, insert
+from sqlalchemy import insert, select
 
 from app.database.connection import async_session_maker
 from app.exceptions import NotFoundException

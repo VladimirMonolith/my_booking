@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class BookingRead(BaseModel):
-    """Модель отображения бронирования после его добавления."""
+    """Модель отображения бронирования."""
 
     id: int
     date_from: date
@@ -20,7 +20,7 @@ class BookingRead(BaseModel):
 
 
 class BookingUserRead(BaseModel):
-    """Модель отображения бронирования."""
+    """Модель отображения бронирования пользователя."""
 
     id: int
     date_from: date
