@@ -24,7 +24,7 @@ class BookingDAO(BaseDAO):
         date_from: date,
         date_to: date
     ):
-        """Добавляет объекты бронирования в БД."""
+        """Добавляет объект бронирования в БД."""
         async with async_session_maker() as session:
             booked_rooms = select(Booking).where(
                 and_(
@@ -37,15 +37,15 @@ class BookingDAO(BaseDAO):
                         and_(
                             Booking.date_from <= date_from,
                             Booking.date_to > date_from
-                        )           
+                        )
                     )
                 )
             ).cte('booked_rooms')
 
-            get_rooms_left = (
+            get_available_rooms = (
                     select(
                         (Room.quantity - func.count(booked_rooms.c.room_id))
-                        .label('rooms_left')
+                        .label('rooms_available')
                     )
                     .select_from(Room)
                     .join(
@@ -55,18 +55,20 @@ class BookingDAO(BaseDAO):
                     .where(Room.id == room_id)
                     .group_by(Room.quantity, booked_rooms.c.room_id)
                 )
-            
-            rooms_left = await session.execute(get_rooms_left)
-            rooms_left = rooms_left.scalar()
 
-            if not rooms_left:
+            rooms_available = await session.execute(get_available_rooms)
+            rooms_available = rooms_available.scalar()
+
+            if not rooms_available:
                 raise RoomCantBookedException
-            
+
             get_room_price = select(
                 Room.price_per_day
             ).filter_by(id=room_id)
+
             price = await session.execute(get_room_price)
             price = price.scalar()
+
             add_booking = insert(Booking).values(
                 user_id=user_id,
                 room_id=room_id,
@@ -75,12 +77,38 @@ class BookingDAO(BaseDAO):
                 price_per_day=price
             ).returning(Booking)
 
-       
             new_booking = await session.execute(add_booking)
             await session.commit()
             return new_booking.scalar()
 
+    @classmethod
+    async def get_user_bookings_objects(cls, user_id: int):
+        """Возвращает все бронирования текущего пользователя."""
 
+        get_user_bookings = (
+            select(
+                Booking.id,
+                Booking.date_from,
+                Booking.date_to,
+                Booking.price_per_day,
+                Booking.total_days,
+                Booking.total_cost,
+                Booking.user_id,
+                Booking.room_id,
+                Room.name,
+                Room.description,
+                Room.services,
+                Room.image_id
+            )
+            .join(
+                Room,
+                Booking.room_id == Room.id,
+                isouter=True)
+            .where(
+                Booking.user_id == user_id
+            )
+        )
 
-        
-
+        async with async_session_maker() as session:
+            user_bookings = await session.execute(get_user_bookings)
+            return user_bookings.all()

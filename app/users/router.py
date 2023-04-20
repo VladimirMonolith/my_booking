@@ -26,7 +26,7 @@ async def register_user(user_data: UserAuth):
     if user:
         raise UserAlreadyExistsException
     hashed_password = get_password_hash(user_data.password)
-    await UserDAO.add_objects(
+    await UserDAO.add_object(
         email=user_data.email, hashed_password=hashed_password
     )
     return 'Вы успешно зарегистрировались'

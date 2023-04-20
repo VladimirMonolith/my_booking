@@ -34,3 +34,8 @@ RoomCantBookedException = HTTPException(
     status_code=status.HTTP_409_CONFLICT,
     detail='Свободных комнат не осталось.'
 )
+
+NotFoundException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail='Данные не найдены.'
+)
