@@ -31,7 +31,7 @@ class HotelLocationRead(BaseModel):
 
 class HotelRoomsRead(BaseModel):
     """Модель отображения всех комнат отеля по заданным параметрам."""
-    
+
     id: int
     name: str
     description: str
