@@ -2,6 +2,7 @@ from datetime import date
 from typing import List
 
 from fastapi import APIRouter
+from app.exceptions import NotFoundException
 
 from app.rooms.dao import RoomDAO
 from app.rooms.schemas import RoomRead
@@ -28,9 +29,23 @@ async def get_hotels_by_location(
     date_to: date
 ):
     """Возвращает все отели по заданным параметрам местоположения."""
-    return await HotelDAO.get_hotels_by_location_objects(
+    hotels = await HotelDAO.get_hotels_by_location_objects(
         location=location, date_from=date_from, date_to=date_to
     )
+
+    if not hotels:
+        raise NotFoundException
+    return hotels
+
+
+@router.get('/id/{hotel_id}', response_model=HotelRead)
+async def get_hotel(hotel_id: int):
+    """Возвращает конкретный отель по id."""
+    hotel = await HotelDAO.get_object(id=hotel_id)
+
+    if not hotel:
+        raise NotFoundException
+    return hotel
 
 
 @router.get('/{hotel_id}/rooms', response_model=List[HotelRoomsRead])

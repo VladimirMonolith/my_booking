@@ -23,6 +23,7 @@ class HotelLocationRead(BaseModel):
     services: list
     rooms_quantity: int
     available_rooms: int
+    image_id: int
 
     class Config:
         orm_mode = True
@@ -39,7 +40,6 @@ class HotelRoomsRead(BaseModel):
     quantity: int
     available_rooms: int
     preliminary_cost: int
-    hotel_id: int
     image_id: int
 
     class Config:
