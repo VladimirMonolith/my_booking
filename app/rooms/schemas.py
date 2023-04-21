@@ -15,16 +15,3 @@ class RoomRead(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-# class HotelLocationRead(BaseModel):
-#     """Модель отображения отеля по заданным параметрам местоположения."""
-
-#     name: str
-#     location: str
-#     services: list
-#     rooms_quantity: int
-#     available_rooms: int
-
-#     class Config:
-#         orm_mode = True
