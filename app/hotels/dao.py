@@ -81,10 +81,8 @@ class HotelDAO(BaseDAO):
             )
         )
         async with async_session_maker() as session:
-            # logger.debug(hotels_with_rooms.compile(engine, compile_kwargs={"literal_binds": True}))
             hotels_with_rooms = await session.execute(hotels_with_rooms)
             return hotels_with_rooms.all()
-        
 
     @classmethod
     async def get_all_hotel_rooms_objects(
@@ -138,6 +136,5 @@ class HotelDAO(BaseDAO):
         )
 
         async with async_session_maker() as session:
-            # query = select(Room).filter_by(hotel_id=hotel_id)
             all_hotels_rooms = await session.execute(get_rooms)
             return all_hotels_rooms.all()

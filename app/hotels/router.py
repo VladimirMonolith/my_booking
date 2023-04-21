@@ -38,7 +38,7 @@ async def get_hotels_by_location(
 
 @router.get('/id/{hotel_id}', response_model=HotelRead)
 async def get_hotel(hotel_id: int):
-    """Возвращает конкретный отель по id."""
+    """Возвращает конкретный отель по его id."""
     hotel = await HotelDAO.get_object(id=hotel_id)
 
     if not hotel:
