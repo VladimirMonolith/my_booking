@@ -2,10 +2,8 @@ from datetime import date
 from typing import List
 
 from fastapi import APIRouter
-from app.exceptions import NotFoundException
 
-from app.rooms.dao import RoomDAO
-from app.rooms.schemas import RoomRead
+from app.exceptions import NotFoundException
 
 from .dao import HotelDAO
 from .schemas import HotelLocationRead, HotelRead, HotelRoomsRead
