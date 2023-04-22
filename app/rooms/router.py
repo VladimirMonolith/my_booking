@@ -26,19 +26,9 @@ async def get_all_rooms():
 
 @router.get('/{room_id}', response_model=RoomRead)
 async def get_room(room_id: int):
-    """Возвращает конкретный тип комнаты по id."""
+    """Возвращает конкретный тип комнаты."""
     room = await RoomDAO.get_object(id=room_id)
 
     if not room:
         raise NotFoundException
     return room
-
-
-# @router.get('/{hotel_id}')
-# async def get_all_hotel_rooms(hotel_id: int, date_from: date, date_to: date):
-#     """Возвращает список всех номеров определенного отеля."""
-#     return await RoomDAO.get_all_hotel_rooms_objects(
-#         hotel_id=hotel_id,
-#         date_from=date_from,
-#         date_to=date_to
-#     )
