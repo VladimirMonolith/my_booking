@@ -1,7 +1,7 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from app.exceptions import NotFoundException
 
@@ -23,8 +23,12 @@ async def get_all_hotels():
 @router.get('/{location}', response_model=List[HotelLocationRead])
 async def get_hotels_by_location(
     location: str,
-    date_from: date,
-    date_to: date
+    date_from: date = Query(
+        ..., description=f'Например, {datetime.now().date()}'
+    ),
+    date_to: date = Query(
+        ..., description=f'Например, {(datetime.now() + timedelta(days=7)).date()}'
+    ),
 ):
     """Возвращает все отели по заданным параметрам местоположения."""
     hotels = await HotelDAO.get_hotels_by_location_objects(

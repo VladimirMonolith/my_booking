@@ -1,6 +1,7 @@
 .vscode/
 migrations/
 alembic.ini
+app/static/
 
 
 
