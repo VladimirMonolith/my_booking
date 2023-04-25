@@ -26,8 +26,6 @@ async def lifespan(app: FastAPI):
     FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
     yield
 
-
-
 app = FastAPI(lifespan=lifespan, title='my_booking')
 
 app.mount('/static', StaticFiles(directory='app/static'), 'static')
