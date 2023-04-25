@@ -1,5 +1,7 @@
 # import uvicorn
 from asyncio.log import logger
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -7,9 +9,6 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
-from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
 
 from app.bookings.router import router as bookings_router
 from app.hotels.router import router as hotels_router
