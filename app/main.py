@@ -57,15 +57,5 @@ app.add_middleware(
     ],
 )
 
-
-# @app.on_event('startup')
-# async def startup():
-#     redis = aioredis.from_url(
-#         'redis://localhost:6379', encoding='utf8', decode_responses=True
-#     )
-#     FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
-
-
-
 # if __name__ == '__main__':
 #     uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=True)
