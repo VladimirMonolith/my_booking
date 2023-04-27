@@ -9,8 +9,19 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+
     SECRET_KEY: str
     ALGORITHM: str
+
+    REDIS_HOST: str
+    REDIS_PORT: str
+
+    SMTP_USER: str
+    SMTP_PASSWORD: str
+    SMTP_HOST: str
+    SMTP_PORT: int
+
+
 
     @property
     def DATABASE_URL(self):
