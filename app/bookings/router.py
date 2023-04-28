@@ -31,6 +31,7 @@ router = APIRouter(
 #         date_from=date_from, date_to=date_to
 #     )
 
+
 @router.post('')
 async def add_booking(
     room_id: int,
@@ -44,11 +45,10 @@ async def add_booking(
         date_from=date_from, date_to=date_to
     )
     booking_dict = parse_obj_as(BookingRead, booking).dict()
-    send_booking_confirmation_email.delay(booking=booking_dict, email_to=user.email)
-
+    send_booking_confirmation_email.delay(
+        booking=booking_dict, email_to=user.email
+    )
     return booking_dict
-
-
 
 
 @router.get('', response_model=Union[List[BookingUserRead], str])
