@@ -8,3 +8,4 @@ fastapi-cache2[redis]
 celery==5.2.7
 flower==1.2.0
 pillow==9.5.0
+sqladmin==0.10.3
