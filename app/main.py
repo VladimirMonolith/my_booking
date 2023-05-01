@@ -58,7 +58,6 @@ app.add_middleware(
     ],
 )
 
-
 admin = Admin(app, engine)
 
 admin.add_view(UserAdmin)
