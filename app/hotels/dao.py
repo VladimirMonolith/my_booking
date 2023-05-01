@@ -89,7 +89,7 @@ class HotelDAO(BaseDAO):
         cls, hotel_id: int,
         date_from: date, date_to: date
     ):
-        """Возвращает список всех номеров определенного отеля
+        """Возвращает список всех/доступных номеров определенного отеля
         на конкретный промежуток времени."""
         booked_rooms = (
             select(Booking.room_id, func.count(Booking.room_id)

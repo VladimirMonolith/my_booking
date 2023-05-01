@@ -21,8 +21,6 @@ class Settings(BaseSettings):
     SMTP_HOST: str
     SMTP_PORT: int
 
-
-
     @property
     def DATABASE_URL(self):
         return (f'postgresql+asyncpg://{self.POSTGRES_USER}:'

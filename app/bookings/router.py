@@ -1,7 +1,7 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 from typing import List, Union
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import parse_obj_as
 
 from app.exceptions import NotFoundException
@@ -21,8 +21,12 @@ router = APIRouter(
 @router.post('')
 async def add_booking(
     room_id: int,
-    date_from: date,
-    date_to: date,
+    date_from: date = Query(
+        ..., description=f'Например, {datetime.now().date()}'
+    ),
+    date_to: date = Query(
+        ..., description=f'Например, {(datetime.now() + timedelta(days=7)).date()}'
+    ),
     user: User = Depends(get_current_user),
 ):
     """Позволяет добавить бронирование."""
