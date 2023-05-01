@@ -9,6 +9,7 @@ def create_booking_confirmation_template(
     booking: dict,
     email_to: EmailStr
 ):
+    """Формирует email о подтверждении бронирования."""
     email = EmailMessage()
 
     email['Subject'] = 'Подтверждение бронирования.'

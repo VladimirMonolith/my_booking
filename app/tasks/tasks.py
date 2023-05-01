@@ -11,6 +11,7 @@ from app.tasks.email_templates import create_booking_confirmation_template
 
 @celery.task
 def photo_processing(path: str):
+    """Обрабатывает загружаемые фото отелей."""
     image_path = Path(path)
     image = Image.open(image_path)
     big_image_resized = image.resize((1000, 500))
@@ -26,6 +27,7 @@ def send_booking_confirmation_email(
     booking: dict,
     email_to: EmailStr
 ):
+    """Отправляет email с подтверждением бронирования."""
     email_to_user = settings.SMTP_USER
     email_content = create_booking_confirmation_template(
         booking=booking, email_to=email_to_user
