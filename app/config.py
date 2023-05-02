@@ -1,8 +1,13 @@
+from typing import Literal
+
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
     """Класс для работы с переменными окружения."""
+
+    MODE = Literal['DEV', 'TEST', 'PROD', 'INFO', 'DEBUG']
+    LOG_LEVEL: str
 
     POSTGRES_DB_NAME: str
     POSTGRES_HOST: str
