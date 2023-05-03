@@ -20,14 +20,14 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         if not log_record.get('timestamp'):
             now = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
             log_record['timestamp'] = now
-        if log_record.get("level"):
+        if log_record.get('level'):
             log_record['level'] = log_record['level'].upper()
         else:
             log_record['level'] = record.levelname
 
 
 formatter = CustomJsonFormatter(
-    "%(timestamp)s %(level)s %(message)s %(module)s %(funcName)s"
+    '%(timestamp)s %(level)s %(message)s %(module)s %(funcName)s'
 )
 
 logHandler.setFormatter(formatter)

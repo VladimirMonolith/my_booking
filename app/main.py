@@ -1,7 +1,9 @@
 # import uvicorn
+import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+import sentry_sdk
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
@@ -15,9 +17,15 @@ from app.config import settings
 from app.database.connection import engine
 from app.hotels.router import router as hotels_router
 from app.images.router import router as images_router
+from app.logger import logger
 from app.pages.router import router as pages_router
 from app.rooms.router import router as rooms_router
 from app.users.router import router as users_router
+
+sentry_sdk.init(
+    dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
+    traces_sample_rate=1.0,
+)
 
 
 @asynccontextmanager
@@ -59,12 +67,16 @@ app.add_middleware(
     ],
 )
 
-@app.middleware("http")
+
+@app.middleware('http')
 async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
+    logger.info(
+        'Request handlinf time',
+        extra={'process_time': round(process_time, 4)}
+    )
     return response
 
 

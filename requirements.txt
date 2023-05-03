@@ -10,3 +10,4 @@ flower==1.2.0
 pillow==9.5.0
 sqladmin==0.10.3
 python-json-logger==2.0.7
+sentry-sdk[fastapi]
