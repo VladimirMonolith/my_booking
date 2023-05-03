@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi_versioning import VersionedFastAPI
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
@@ -40,7 +41,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, title='my_booking')
 
-app.mount('/static', StaticFiles(directory='app/static'), 'static')
+# app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
 app.include_router(users_router)
 app.include_router(bookings_router)
@@ -79,6 +80,11 @@ async def add_process_time_header(request: Request, call_next):
     )
     return response
 
+app = VersionedFastAPI(
+    app,
+    version_format='{major}',
+    prefix_format='/v{major}',
+)
 
 admin = Admin(app, engine)
 
@@ -86,6 +92,8 @@ admin.add_view(UserAdmin)
 admin.add_view(BookingAdmin)
 admin.add_view(HotelAdmin)
 admin.add_view(RoomAdmin)
+
+app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
 
 # if __name__ == '__main__':

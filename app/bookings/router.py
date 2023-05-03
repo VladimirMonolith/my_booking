@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 from typing import List, Union
 
 from fastapi import APIRouter, Depends, Query
+from fastapi_versioning import version
 from pydantic import parse_obj_as
 
 from app.exceptions import NotFoundException
@@ -19,6 +20,7 @@ router = APIRouter(
 
 
 @router.post('')
+@version(1)
 async def add_booking(
     room_id: int,
     date_from: date = Query(
@@ -42,6 +44,7 @@ async def add_booking(
 
 
 @router.get('', response_model=Union[List[BookingUserRead], str])
+@version(1)
 async def get_user_bookings(user: User = Depends(get_current_user)):
     """Возвращает все бронирования текущего пользователя."""
     user_bookings = await BookingDAO.get_user_bookings_objects(user_id=user.id)
@@ -52,6 +55,7 @@ async def get_user_bookings(user: User = Depends(get_current_user)):
 
 
 @router.get('/{booking_id}', response_model=BookingRead)
+@version(1)
 async def get_booking(booking_id: int):
     """Возвращает бронирование по id."""
     booking = await BookingDAO.get_object(id=booking_id)
@@ -62,6 +66,7 @@ async def get_booking(booking_id: int):
 
 
 @router.delete('/{booking_id}')
+@version(1)
 async def delete_booking(
     booking_id: int, user: User = Depends(get_current_user)
 ):
