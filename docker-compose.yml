@@ -5,7 +5,6 @@ services:
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart: always
     env_file:
       - ./.env-docker
     ports:
@@ -14,7 +13,6 @@ services:
   redis:
     image: redis:7
     container_name: redis
-    restart: always
     depends_on:
       - db
     env_file:
@@ -22,11 +20,10 @@ services:
     ports:
       - 6379:6379
 
-  my_booking:
-    # image: booking_app
+  app:
     build:
       context: .
-    container_name: my_booking
+    container_name: app
     restart: always
     volumes:
       - my_booking_static:/my_booking/app/static/
@@ -37,13 +34,12 @@ services:
       - ./.env-docker
     command: ['/my_booking/docker/app.sh']
     ports:
-      - 9000:8000
+      - 7777:8000
 
   celery:
-    # image: booking_celery
     build:
       context: .
-    container_name: my_booking_celery
+    container_name: celery
     command: ['/my_booking/docker/celery.sh', 'celery']
     depends_on:
       - redis
@@ -51,11 +47,10 @@ services:
       - ./.env-docker
 
   flower:
-    # image: booking_flower
     build:
       context: .
-    container_name: my_booking_flower
-    command: ["/my_booking/docker/celery.sh", "flower"]
+    container_name: flower
+    command: ['/my_booking/docker/celery.sh', 'flower']
     depends_on:
       - redis
       - celery
