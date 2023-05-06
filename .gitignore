@@ -2,6 +2,7 @@
 migrations/
 alembic.ini
 app/static/
+.env-docker
 
 
 
