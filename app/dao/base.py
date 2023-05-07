@@ -1,7 +1,9 @@
 from sqlalchemy import insert, select
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.database.connection import async_session_maker
 from app.exceptions import NotFoundException
+from app.logger import logger
 
 
 class BaseDAO:
@@ -47,3 +49,26 @@ class BaseDAO:
             await session.delete(result)
             await session.commit()
             return 'Удаление успешно завершено.'
+
+    @classmethod
+    async def add_objects(cls, *data):
+        """Добавляет объекты в БД."""
+        try:
+            query = insert(cls.model).values(*data).returning(cls.model.id)
+            async with async_session_maker() as session:
+                result = await session.execute(query)
+                await session.commit()
+                return result.mappings().first()
+        except (SQLAlchemyError, Exception) as error:
+            if isinstance(error, SQLAlchemyError):
+                message = 'Database Exception'
+            elif isinstance(error, Exception):
+                message = 'Unknown Exception'
+            message += ": Cannot bulk insert data into table"
+
+            logger.error(
+                message,
+                extra={"table": cls.model.__tablename__},
+                exc_info=True
+            )
+            return None

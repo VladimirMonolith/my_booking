@@ -22,6 +22,7 @@ from app.logger import logger
 from app.pages.router import router as pages_router
 from app.rooms.router import router as rooms_router
 from app.users.router import router as users_router
+from app.import_data.router import router as import_data_router
 
 sentry_sdk.init(
     dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
@@ -49,6 +50,7 @@ app.include_router(hotels_router)
 app.include_router(rooms_router)
 app.include_router(pages_router)
 app.include_router(images_router)
+app.include_router(import_data_router)
 
 
 # Подключение CORS, чтобы запросы к API могли приходить из браузера
