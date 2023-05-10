@@ -15,18 +15,21 @@ class BaseDAO:
     async def get_all_objects(cls, **kwargs):
         """Возвращает все объекты модели."""
         async with async_session_maker() as session:
-            query = (select(cls.model).filter_by(**kwargs)
+            query = (select(cls.model.__table__.columns).filter_by(**kwargs)
                      .order_by(cls.model.id))
             result = await session.execute(query)
-            return result.scalars().all()
+            # return result.scalars().all()
+            print(result.mappings().all())
+            return result.mappings().all()
 
     @classmethod
     async def get_object(cls, **kwargs):
         """Возвращает объект модели."""
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**kwargs)
+            query = select(cls.model.__table__.columns).filter_by(**kwargs)
             result = await session.execute(query)
-            return result.scalar_one_or_none()
+            # return result.scalar_one_or_none()
+            return result.mappings().one_or_none()
 
     @classmethod
     async def add_object(cls, **kwargs):

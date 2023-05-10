@@ -13,3 +13,4 @@ python-json-logger==2.0.7
 sentry-sdk[fastapi]
 fastapi-versioning==0.10.0
 gunicorn==20.1.0
+prometheus-fastapi-instrumentator==6.0.0

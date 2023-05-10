@@ -54,6 +54,8 @@ async def get_hotel(hotel_id: int):
     return hotel
 
 
+
+
 @router.get('/{hotel_id}/rooms', response_model=List[HotelRoomsRead])
 async def get_all_hotel_rooms(hotel_id: int, date_from: date, date_to: date):
     """Возвращает список всех/доступных номеров определенного отеля."""

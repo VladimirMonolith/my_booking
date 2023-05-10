@@ -18,8 +18,8 @@ async def get_all_rooms():
     """Возвращает все комнаты."""
     rooms = await RoomDAO.get_all_objects()
 
-    if not rooms:
-        raise NotFoundException
+    # if not rooms:
+    #     raise NotFoundException
     return rooms
 
 

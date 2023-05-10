@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_versioning import VersionedFastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
@@ -23,6 +24,8 @@ from app.logger import logger
 from app.pages.router import router as pages_router
 from app.rooms.router import router as rooms_router
 from app.users.router import router as users_router
+from app.prometheus.router import router as prometheus_router
+
 
 sentry_sdk.init(
     dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
@@ -49,6 +52,8 @@ app.include_router(rooms_router)
 app.include_router(pages_router)
 app.include_router(images_router)
 app.include_router(import_data_router)
+app.include_router(import_data_router)
+app.include_router(prometheus_router)
 
 
 # Подключение CORS, чтобы запросы к API могли приходить из браузера
@@ -69,6 +74,29 @@ app.add_middleware(
 )
 
 
+app = VersionedFastAPI(
+    app,
+    version_format='{major}',
+    prefix_format='/v{major}',
+)
+
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=[".*admin.*", "/metrics"],
+)
+instrumentator.instrument(app).expose(app)
+
+
+admin = Admin(app, engine)
+
+admin.add_view(UserAdmin)
+admin.add_view(BookingAdmin)
+admin.add_view(HotelAdmin)
+admin.add_view(RoomAdmin)
+
+app.mount('/static', StaticFiles(directory='app/static'), 'static')
+
 @app.middleware('http')
 async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
@@ -80,20 +108,6 @@ async def add_process_time_header(request: Request, call_next):
     )
     return response
 
-app = VersionedFastAPI(
-    app,
-    version_format='{major}',
-    prefix_format='/v{major}',
-)
-
-admin = Admin(app, engine)
-
-admin.add_view(UserAdmin)
-admin.add_view(BookingAdmin)
-admin.add_view(HotelAdmin)
-admin.add_view(RoomAdmin)
-
-app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
 
 # if __name__ == '__main__':
