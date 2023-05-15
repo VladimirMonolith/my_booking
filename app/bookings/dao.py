@@ -75,11 +75,12 @@ class BookingDAO(BaseDAO):
                     date_from=date_from,
                     date_to=date_to,
                     price_per_day=price
-                ).returning(Booking)
+                ).returning(Booking.id, Booking.user_id, Booking.room_id)
 
                 new_booking = await session.execute(add_booking)
                 await session.commit()
-                return new_booking.scalar()
+                # return new_booking.scalar()
+                return new_booking.mappings().one()
 
         except (SQLAlchemyError, Exception) as error:
             if isinstance(error, SQLAlchemyError):

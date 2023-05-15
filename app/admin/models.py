@@ -22,9 +22,9 @@ class HotelAdmin(ModelView, model=Hotel):
 
     column_list = [c.name for c in Hotel.__table__.c]
     column_list += [Hotel.rooms]
-    name = "Отель"
-    name_plural = "Отели"
-    icon = "fa-solid fa-hotel"
+    name = 'Отель'
+    name_plural = 'Отели'
+    icon = 'fa-solid fa-hotel'
 
 
 class RoomAdmin(ModelView, model=Room):
@@ -32,9 +32,9 @@ class RoomAdmin(ModelView, model=Room):
 
     column_list = [c.name for c in Room.__table__.c]
     column_list += [Room.hotel, Room.booking]
-    name = "Номер"
-    name_plural = "Номера"
-    icon = "fa-solid fa-bed"
+    name = 'Номер'
+    name_plural = 'Номера'
+    icon = 'fa-solid fa-bed'
 
 
 class BookingAdmin(ModelView, model=Booking):
@@ -44,4 +44,4 @@ class BookingAdmin(ModelView, model=Booking):
     column_list += [Booking.user]
     name = 'Бронирование'
     name_plural = 'Бронирования'
-    icon = "fa-solid fa-book"
+    icon = 'fa-solid fa-book'

@@ -22,15 +22,11 @@ from app.images.router import router as images_router
 from app.import_data.router import router as import_data_router
 from app.logger import logger
 from app.pages.router import router as pages_router
+from app.prometheus.router import router as prometheus_router
 from app.rooms.router import router as rooms_router
 from app.users.router import router as users_router
-from app.prometheus.router import router as prometheus_router
 
 
-sentry_sdk.init(
-    dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
-    traces_sample_rate=1.0,
-)
 
 
 @asynccontextmanager
@@ -44,6 +40,13 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan, title='my_booking')
+# app = FastAPI(title='my_booking')
+
+sentry_sdk.init(
+    dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
+    traces_sample_rate=1.0,
+)
+
 
 app.include_router(users_router)
 app.include_router(bookings_router)
@@ -52,14 +55,11 @@ app.include_router(rooms_router)
 app.include_router(pages_router)
 app.include_router(images_router)
 app.include_router(import_data_router)
-app.include_router(import_data_router)
 app.include_router(prometheus_router)
 
 
-# Подключение CORS, чтобы запросы к API могли приходить из браузера
 origins = [
-    # 3000 - порт, на котором работает фронтенд на React.js
-    "http://localhost:3000",
+    'http://localhost:3000',
 ]
 
 app.add_middleware(
@@ -80,10 +80,18 @@ app = VersionedFastAPI(
     prefix_format='/v{major}',
 )
 
+# app.include_router(pages_router)
+
+
+@app.on_event("startup")
+def startup():
+    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="cache")
+
 
 instrumentator = Instrumentator(
     should_group_status_codes=False,
-    excluded_handlers=[".*admin.*", "/metrics"],
+    excluded_handlers=['.*admin.*', '/metrics'],
 )
 instrumentator.instrument(app).expose(app)
 
@@ -99,6 +107,7 @@ app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
 @app.middleware('http')
 async def add_process_time_header(request: Request, call_next):
+    """Добавляет заголовок со временем выполнения запроса."""
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
@@ -108,7 +117,5 @@ async def add_process_time_header(request: Request, call_next):
     )
     return response
 
-
-
 # if __name__ == '__main__':
-#     uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=True)
+#     uvicorn.run('app.main:app', host='127.0.0.1', port=8000, reload=True)

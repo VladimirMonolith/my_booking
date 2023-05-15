@@ -37,7 +37,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -85,7 +85,7 @@
           "$$hashKey": "object:140",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "expr": "sum by (status) (rate(http_requests_total[1m]))",
           "format": "time_series",
@@ -135,7 +135,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -183,7 +183,7 @@
           "$$hashKey": "object:766",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "editorMode": "code",
           "expr": "sum(rate(http_requests_total{status=\"500\"}[30s]))",
@@ -234,7 +234,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -276,7 +276,7 @@
           "$$hashKey": "object:638",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "expr": "process_resident_memory_bytes{job=\"app\"}",
           "format": "time_series",
@@ -325,7 +325,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -369,7 +369,7 @@
           "$$hashKey": "object:146",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "expr": "http_request_duration_seconds_sum{job=\"app\",handler!=\"none\"} / http_request_duration_seconds_count",
           "format": "time_series",
@@ -421,7 +421,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -467,7 +467,7 @@
           "$$hashKey": "object:1079",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "expr": "increase(http_request_duration_seconds_bucket{le=\"0.1\"}[1m]) \n/ ignoring (le) increase(http_request_duration_seconds_count[1m])",
           "format": "time_series",
@@ -519,7 +519,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "edZIymU4k"
+        "uid": "10TPJp84k"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -561,7 +561,7 @@
           "$$hashKey": "object:638",
           "datasource": {
             "type": "prometheus",
-            "uid": "edZIymU4k"
+            "uid": "10TPJp84k"
           },
           "expr": "rate(process_cpu_seconds_total{job=\"app\"}[30s])",
           "format": "time_series",
@@ -634,7 +634,7 @@
   },
   "timezone": "",
   "title": "my_booking(FastAPI) dashboard",
-  "uid": "_eX4mpl312_10_05_2023",
-  "version": 2,
+  "uid": "_eX4mpl312_13_05_2023",
+  "version": 1,
   "weekStart": ""
 }

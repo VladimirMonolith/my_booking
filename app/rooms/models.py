@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import JSON, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -17,7 +17,7 @@ class Room(Base):
         String(length=500), nullable=False
     )
     price_per_day: Mapped[int] = mapped_column(Integer, nullable=False)
-    services: Mapped[Optional[str]] = mapped_column(JSON, nullable=True)
+    services: Mapped[Optional[List[str]]] = mapped_column(JSON, nullable=True)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
     image_id: Mapped[Optional[str]] = mapped_column(Integer, nullable=True)

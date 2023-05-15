@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 from pydantic import BaseModel
 
@@ -32,7 +33,7 @@ class BookingUserRead(BaseModel):
     room_id: int
     name: str
     description: str
-    services: list
+    services: List[str]
     image_id: str
 
     class Config:

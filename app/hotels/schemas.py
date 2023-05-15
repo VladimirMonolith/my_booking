@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -7,7 +9,7 @@ class HotelRead(BaseModel):
     id: int
     name: str
     location: str
-    services: list
+    services: List[str]
     rooms_quantity: int
     image_id: int
 
@@ -20,7 +22,7 @@ class HotelLocationRead(BaseModel):
 
     name: str
     location: str
-    services: list
+    services: List[str]
     rooms_quantity: int
     available_rooms: int
     image_id: int
@@ -36,7 +38,7 @@ class HotelRoomsRead(BaseModel):
     name: str
     description: str
     price_per_day: int
-    services: list
+    services: List[str]
     quantity: int
     available_rooms: int
     preliminary_cost: int

@@ -29,7 +29,7 @@ async def register_user(user_data: UserAuth):
     await UserDAO.add_object(
         email=user_data.email, hashed_password=hashed_password
     )
-    return 'Вы успешно зарегистрировались'
+    return 'Вы успешно зарегистрировались.'
 
 
 @router.post('/login')

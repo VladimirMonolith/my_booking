@@ -36,11 +36,18 @@ async def add_booking(
         user_id=user.id, room_id=room_id,
         date_from=date_from, date_to=date_to
     )
-    booking_dict = parse_obj_as(BookingRead, booking).dict()
-    send_booking_confirmation_email.delay(
-        booking=booking_dict, email_to=user.email
-    )
-    return booking_dict
+
+    # Celery
+    # send_booking_confirmation_email.delay(booking, user.email)
+    # Background Tasks
+    # background_tasks.add_task(send_booking_confirmation_email, booking, user.email)
+    return booking
+
+    # booking_dict = parse_obj_as(BookingRead, booking).dict()
+    # send_booking_confirmation_email.delay(
+    #     booking=booking_dict, email_to=user.email
+    # )
+    # return booking_dict
 
 
 @router.get('', response_model=Union[List[BookingUserRead], str])
