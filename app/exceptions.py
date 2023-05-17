@@ -41,7 +41,7 @@ class TokenInvalidDataException(MyBookingException):
 
 class RoomCantBookedException(MyBookingException):
     status_code = status.HTTP_409_CONFLICT
-    detail = 'Свободных комнат не осталось.'
+    detail = 'Свободных комнат данного типа не осталось.'
 
 
 class NotFoundException(MyBookingException):

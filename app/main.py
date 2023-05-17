@@ -105,17 +105,17 @@ admin.add_view(RoomAdmin)
 
 app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
-@app.middleware('http')
-async def add_process_time_header(request: Request, call_next):
-    """Добавляет заголовок со временем выполнения запроса."""
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    logger.info(
-        'Request handlinf time',
-        extra={'process_time': round(process_time, 4)}
-    )
-    return response
+# @app.middleware('http')
+# async def add_process_time_header(request: Request, call_next):
+#     """Добавляет заголовок со временем выполнения запроса."""
+#     start_time = time.time()
+#     response = await call_next(request)
+#     process_time = time.time() - start_time
+#     logger.info(
+#         'Request handlinf time',
+#         extra={'process_time': round(process_time, 4)}
+#     )
+#     return response
 
 # if __name__ == '__main__':
 #     uvicorn.run('app.main:app', host='127.0.0.1', port=8000, reload=True)
