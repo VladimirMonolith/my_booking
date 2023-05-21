@@ -28,7 +28,6 @@ class BaseDAO:
         async with async_session_maker() as session:
             query = select(cls.model.__table__.columns).filter_by(**kwargs)
             result = await session.execute(query)
-            # return result.scalar_one_or_none()
             return result.mappings().one_or_none()
 
     @classmethod
@@ -67,11 +66,11 @@ class BaseDAO:
                 message = 'Database Exception'
             elif isinstance(error, Exception):
                 message = 'Unknown Exception'
-            message += ": Cannot bulk insert data into table"
+            message += ': Cannot bulk insert data into table'
 
             logger.error(
                 message,
-                extra={"table": cls.model.__tablename__},
+                extra={'table': cls.model.__tablename__},
                 exc_info=True
             )
             return None

@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Iterable
 
@@ -23,6 +24,8 @@ def convert_csv_to_postgres_format(csv_iterable: Iterable):
             for key, value in row.items():
                 if value.isdigit():
                     row[key] = int(value)
+                elif key == 'services':
+                    row[key] = json.loads(value.replace("'", '"'))
                 elif 'date' in key:
                     row[key] = datetime.strptime(value, '%Y-%m-%d')
             data.append(row)

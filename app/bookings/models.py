@@ -4,8 +4,6 @@ from sqlalchemy import Computed, Date, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.db import Base
-from app.rooms.models import Room
-from app.users.models import User
 
 
 class Booking(Base):
@@ -26,8 +24,8 @@ class Booking(Base):
     )
     room_id: Mapped[int] = mapped_column(ForeignKey('rooms.id'))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    user: Mapped['User'] = relationship(back_populates='booking')
-    room: Mapped['Room'] = relationship(back_populates='booking')
+    user = relationship('User', back_populates='booking')
+    room = relationship('Room', back_populates='booking')
 
     def __str__(self):
         return f'Бронирование: id - {self.id}, c {self.date_from} по {self.date_to}'

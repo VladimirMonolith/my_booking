@@ -11,8 +11,6 @@ from app.rooms.models import Room
 
 from .models import Booking
 
-from sqlalchemy.orm import selectinload
-
 
 class BookingDAO(BaseDAO):
     model = Booking
@@ -61,8 +59,6 @@ class BookingDAO(BaseDAO):
                 rooms_available = await session.execute(get_available_rooms)
                 rooms_available = rooms_available.scalar()
 
-                
-
                 if not rooms_available:
                     raise RoomCantBookedException
 
@@ -86,11 +82,13 @@ class BookingDAO(BaseDAO):
                     Booking.user_id
                 )
 
+                # ).returning(Booking)
+
                 new_booking = await session.execute(add_booking)
                 await session.commit()
                 # return new_booking.scalar()
                 return new_booking.mappings().one()
-        
+
         except RoomCantBookedException:
             raise RoomCantBookedException
 
@@ -111,31 +109,20 @@ class BookingDAO(BaseDAO):
     @classmethod
     async def get_user_bookings_objects(cls, user_id: int):
         """Возвращает все бронирования текущего пользователя."""
-
-        get_user_bookings = (
-            select(
-                Booking.id,
-                Booking.date_from,
-                Booking.date_to,
-                Booking.price_per_day,
-                Booking.total_days,
-                Booking.total_cost,
-                Booking.user_id,
-                Booking.room_id,
-                Room.name,
-                Room.description,
-                Room.services,
-                Room.image_id
-            )
-            .join(
-                Room,
-                Booking.room_id == Room.id,
-                isouter=True)
-            .where(
-                Booking.user_id == user_id
-            )
-        )
-
         async with async_session_maker() as session:
+            get_user_bookings = (
+                select(
+                    Booking.__table__.columns,
+                    Room.__table__.columns
+                )
+                .join(
+                    Room,
+                    Booking.room_id == Room.id,
+                    isouter=True)
+                .where(
+                    Booking.user_id == user_id
+                )
+            )
+
             user_bookings = await session.execute(get_user_bookings)
-            return user_bookings.all()
+            return user_bookings.mappings().all()
