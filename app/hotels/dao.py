@@ -60,13 +60,8 @@ class HotelDAO(BaseDAO):
 
         hotels_with_rooms = (
             select(
-                Hotel.id,
-                Hotel.name,
-                Hotel.location,
-                Hotel.services,
-                Hotel.rooms_quantity,
-                Hotel.image_id,
-                booked_hotels.c.available_rooms,
+                Hotel.__table__.columns,
+                booked_hotels.c.available_rooms
             )
             .join(
                 booked_hotels,
@@ -82,7 +77,7 @@ class HotelDAO(BaseDAO):
         )
         async with async_session_maker() as session:
             hotels_with_rooms = await session.execute(hotels_with_rooms)
-            return hotels_with_rooms.all()
+            return hotels_with_rooms.mappings().all()
 
     @classmethod
     async def get_all_hotel_rooms_objects(
@@ -113,14 +108,7 @@ class HotelDAO(BaseDAO):
 
         get_rooms = (
             select(
-                Room.id,
-                Room.name,
-                Room.description,
-                Room.price_per_day,
-                Room.services,
-                Room.quantity,
-                Room.hotel_id,
-                Room.image_id,
+                Room.__table__.columns,
                 (Room.quantity - func.coalesce(booked_rooms.c.count_booked_rooms, 0))
                 .label('available_rooms'),
                 (Room.price_per_day * (date_to - date_from).days)
@@ -137,4 +125,4 @@ class HotelDAO(BaseDAO):
 
         async with async_session_maker() as session:
             all_hotels_rooms = await session.execute(get_rooms)
-            return all_hotels_rooms.all()
+            return all_hotels_rooms.mappings().all()

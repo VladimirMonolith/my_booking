@@ -3,12 +3,11 @@ from typing import List
 
 from fastapi import APIRouter, Query
 from fastapi_cache.decorator import cache
-from pydantic import parse_obj_as
 
-from app.exceptions import NotFoundException
+from app.exceptions import DateFromCannotBeAfterDateTo, NotFoundException
 
 from .dao import HotelDAO
-from .schemas import HotelLocationRead, HotelRead, HotelRoomsRead
+from .schemas import HotelRead, HotelRoomsRead
 
 router = APIRouter(
     prefix='/hotels',
@@ -34,14 +33,15 @@ async def get_hotels_by_location(
     ),
 ):
     """Возвращает все отели по заданным параметрам местоположения."""
+    if date_from > date_to:
+        raise DateFromCannotBeAfterDateTo
     hotels = await HotelDAO.get_hotels_by_location_objects(
         location=location, date_from=date_from, date_to=date_to
     )
-    hotels_json = parse_obj_as(List[HotelLocationRead], hotels)
 
     if not hotels:
         raise NotFoundException
-    return hotels_json
+    return hotels
 
 
 @router.get('/id/{hotel_id}', response_model=HotelRead)
@@ -54,11 +54,12 @@ async def get_hotel(hotel_id: int):
     return hotel
 
 
-
-
 @router.get('/{hotel_id}/rooms', response_model=List[HotelRoomsRead])
 async def get_all_hotel_rooms(hotel_id: int, date_from: date, date_to: date):
     """Возвращает список всех/доступных номеров определенного отеля."""
+    if date_from > date_to:
+        raise DateFromCannotBeAfterDateTo
+
     return await HotelDAO.get_all_hotel_rooms_objects(
         hotel_id=hotel_id,
         date_from=date_from,
