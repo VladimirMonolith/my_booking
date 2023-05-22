@@ -18,9 +18,7 @@ class BaseDAO:
             query = (select(cls.model.__table__.columns).filter_by(**kwargs)
                      .order_by(cls.model.id))
             result = await session.execute(query)
-            # return result.scalars().all()
             return result.mappings().all()
-
 
     @classmethod
     async def get_object(cls, **kwargs):

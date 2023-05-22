@@ -1,6 +1,5 @@
 # import uvicorn
 import time
-from contextlib import asynccontextmanager
 
 import sentry_sdk
 from fastapi import FastAPI, Request
@@ -26,27 +25,12 @@ from app.prometheus.router import router as prometheus_router
 from app.rooms.router import router as rooms_router
 from app.users.router import router as users_router
 
-
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    redis = aioredis.from_url(
-        f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}',
-        encoding='utf8',
-        decode_responses=True
-    )
-    FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
-    yield
-
-app = FastAPI(lifespan=lifespan, title='my_booking')
-# app = FastAPI(title='my_booking')
+app = FastAPI(title='my_booking')
 
 sentry_sdk.init(
     dsn='https://b6decba048b34e27913119ed94a07ef6@o1384117.ingest.sentry.io/4505118588600320',
     traces_sample_rate=1.0,
 )
-
 
 app.include_router(users_router)
 app.include_router(bookings_router)
@@ -56,7 +40,6 @@ app.include_router(pages_router)
 app.include_router(images_router)
 app.include_router(import_data_router)
 app.include_router(prometheus_router)
-
 
 origins = [
     'http://localhost:3000',
@@ -73,19 +56,20 @@ app.add_middleware(
     ],
 )
 
-
 app = VersionedFastAPI(
     app,
     version_format='{major}',
     prefix_format='/v{major}',
 )
 
-# app.include_router(pages_router)
 
-
-@app.on_event("startup")
+@app.on_event('startup')
 def startup():
-    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_responses=True)
+    redis = aioredis.from_url(
+        f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}',
+        encoding='utf8',
+        decode_responses=True
+    )
     FastAPICache.init(RedisBackend(redis), prefix="cache")
 
 
@@ -105,17 +89,18 @@ admin.add_view(RoomAdmin)
 
 app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
-# @app.middleware('http')
-# async def add_process_time_header(request: Request, call_next):
-#     """Добавляет заголовок со временем выполнения запроса."""
-#     start_time = time.time()
-#     response = await call_next(request)
-#     process_time = time.time() - start_time
-#     logger.info(
-#         'Request handlinf time',
-#         extra={'process_time': round(process_time, 4)}
-#     )
-#     return response
+
+@app.middleware('http')
+async def add_process_time_header(request: Request, call_next):
+    """Добавляет заголовок со временем выполнения запроса."""
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    logger.info(
+        'Request handlinf time',
+        extra={'process_time': round(process_time, 4)}
+    )
+    return response
 
 # if __name__ == '__main__':
 #     uvicorn.run('app.main:app', host='127.0.0.1', port=8000, reload=True)

@@ -14,6 +14,7 @@ from app.users.dao import UserDAO
 
 
 def get_token(request: Request):
+    """Добавляет токен доступа в куки."""
     token = request.cookies.get('my_booking_access_token')
     if not token:
         raise NotAuthUserException
@@ -21,6 +22,7 @@ def get_token(request: Request):
 
 
 async def get_current_user(token: str = Depends(get_token)):
+    """Позволяет получить текущего пользователя."""
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, settings.ALGORITHM

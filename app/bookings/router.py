@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi_versioning import version
 from pydantic import parse_obj_as
 
-from app.exceptions import NotFoundException
+from app.exceptions import DateFromCannotBeAfterDateTo, NotFoundException
 from app.tasks.tasks import send_booking_confirmation_email
 from app.users.dependencies import get_current_user
 from app.users.models import User
@@ -32,6 +32,8 @@ async def add_booking(
     user: User = Depends(get_current_user),
 ):
     """Позволяет добавить бронирование."""
+    if date_from > date_to:
+        raise DateFromCannotBeAfterDateTo
     booking = await BookingDAO.add_booking_object(
         user_id=user.id, room_id=room_id,
         date_from=date_from, date_to=date_to

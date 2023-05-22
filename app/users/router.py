@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response
+from fastapi_versioning import version
 
 from app.exceptions import (
     IncorrectUserDataException,
@@ -19,6 +20,7 @@ router = APIRouter(
 
 
 @router.post('/register')
+@version(1)
 async def register_user(user_data: UserAuth):
     """Регистрирует пользователя."""
     user = await UserDAO.get_object(email=user_data.email)
@@ -33,6 +35,7 @@ async def register_user(user_data: UserAuth):
 
 
 @router.post('/login')
+@version(1)
 async def login_user(response: Response, user_data: UserAuth):
     """Позволяет пользователю аутентифицироваться."""
     user = await authenticate_user(
@@ -47,11 +50,15 @@ async def login_user(response: Response, user_data: UserAuth):
 
 
 @router.post('/logout')
+@version(1)
 async def logout_user(response: Response):
+    """Позволяет пользователю покинуть сайт."""
     response.delete_cookie('my_booking_access_token')
     return 'Пользователь вышел из системы.'
 
 
 @router.get('/me', response_model=UserRead)
+@version(1)
 async def me(current_user: User = Depends(get_current_user)):
+    """Позволяет пользователю получить информацию о себе."""
     return current_user

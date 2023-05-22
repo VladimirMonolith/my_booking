@@ -3,6 +3,7 @@ import csv
 from typing import Literal
 
 from fastapi import APIRouter, Depends, UploadFile, status
+from fastapi_versioning import version
 
 from app.exceptions import CannotAddDataToDatabase, CannotProcessCSV
 from app.users.dependencies import get_current_user
@@ -20,6 +21,7 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(get_current_user)],
 )
+@version(1)
 async def import_data_to_table(
     file: UploadFile,
     table_name: Literal['hotels', 'rooms', 'bookings', 'users']

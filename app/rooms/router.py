@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter
+from fastapi_versioning import version
 
 from app.exceptions import NotFoundException
 
@@ -14,6 +15,7 @@ router = APIRouter(
 
 
 @router.get('', response_model=List[RoomRead])
+@version(1)
 async def get_all_rooms():
     """Возвращает все комнаты."""
     rooms = await RoomDAO.get_all_objects()
@@ -24,6 +26,7 @@ async def get_all_rooms():
 
 
 @router.get('/{room_id}', response_model=RoomRead)
+@version(1)
 async def get_room(room_id: int):
     """Возвращает конкретный тип комнаты."""
     room = await RoomDAO.get_object(id=room_id)

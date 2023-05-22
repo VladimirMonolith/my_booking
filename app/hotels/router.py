@@ -3,6 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, Query
 from fastapi_cache.decorator import cache
+from fastapi_versioning import version
 
 from app.exceptions import DateFromCannotBeAfterDateTo, NotFoundException
 
@@ -16,6 +17,7 @@ router = APIRouter(
 
 
 @router.get('', response_model=List[HotelRead])
+@version(1)
 async def get_all_hotels():
     """Возвращает все отели."""
     return await HotelDAO.get_all_objects()
@@ -23,6 +25,7 @@ async def get_all_hotels():
 
 @router.get('/{location}')
 @cache(expire=60)
+@version(1)
 async def get_hotels_by_location(
     location: str,
     date_from: date = Query(
@@ -45,6 +48,7 @@ async def get_hotels_by_location(
 
 
 @router.get('/id/{hotel_id}', response_model=HotelRead)
+@version(1)
 async def get_hotel(hotel_id: int):
     """Возвращает конкретный отель по его id."""
     hotel = await HotelDAO.get_object(id=hotel_id)
@@ -55,6 +59,7 @@ async def get_hotel(hotel_id: int):
 
 
 @router.get('/{hotel_id}/rooms', response_model=List[HotelRoomsRead])
+@version(1)
 async def get_all_hotel_rooms(hotel_id: int, date_from: date, date_to: date):
     """Возвращает список всех/доступных номеров определенного отеля."""
     if date_from > date_to:

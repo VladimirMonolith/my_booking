@@ -1,6 +1,7 @@
 import shutil
 
 from fastapi import APIRouter, UploadFile, status
+from fastapi_versioning import version
 
 from app.tasks.tasks import photo_processing
 
@@ -11,6 +12,7 @@ router = APIRouter(
 
 
 @router.post('/hotels', status_code=status.HTTP_201_CREATED)
+@version(1)
 async def download_hotels_images(file: UploadFile, file_id: int, ):
     """Позволяет добавлять изображения для отелей."""
     image_path = f'app/static/images/{file_id}.webp'
