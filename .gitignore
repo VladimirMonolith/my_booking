@@ -3,6 +3,7 @@ migrations/
 alembic.ini
 app/static/
 .env-docker
+.env-render
 
 
 
