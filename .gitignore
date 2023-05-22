@@ -1,7 +1,7 @@
 .vscode/
 migrations/
 alembic.ini
-app/static/
+# app/static/
 .env-docker
 .env-render
 
