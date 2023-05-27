@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
     class Config:
         # env_file = 'app/.env'
-        env_file = '.env-render'
+        env_file = '.env-ren'
 
 
 settings = Settings()
