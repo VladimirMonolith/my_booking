@@ -33,8 +33,7 @@ class Settings(BaseSettings):
                 f'{self.POSTGRES_PORT}/{self.POSTGRES_DB_NAME}')
 
     class Config:
-        # env_file = 'app/.env'
-        env_file = 'app/.env-local-example'
+        env_file = 'app/.env'
 
 
 settings = Settings()

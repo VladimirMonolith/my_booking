@@ -33,7 +33,7 @@ services:
     env_file:
       - ./.env-docker
     command: ['/my_booking/docker/app.sh']
-    # command: sh -c 'alembic upgrade head && gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000'
+    # command: sh -c "alembic upgrade head && gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"
     ports:
       - 7777:8000
 
@@ -42,6 +42,7 @@ services:
       context: .
     container_name: celery
     command: ['/my_booking/docker/celery.sh', 'celery']
+    # command: sh -c "celery --app=app.tasks.celery:celery worker -l INFO"
     depends_on:
       - redis
     env_file:
@@ -52,6 +53,7 @@ services:
       context: .
     container_name: flower
     command: ['/my_booking/docker/celery.sh', 'flower']
+    # command: sh -c "celery --app=app.tasks.celery:celery flower"
     depends_on:
       - redis
       - celery

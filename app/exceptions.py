@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 
 
 class MyBookingException(HTTPException):
-    status_code = 500
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     detail = ''
 
     def __init__(self):
@@ -16,7 +16,7 @@ class UserAlreadyExistsException(MyBookingException):
 
 class IncorrectUserDataException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Проверьте введённые данные.'
+    detail = 'Введенные данные не валидны.'
 
 
 class NotAuthUserException(MyBookingException):

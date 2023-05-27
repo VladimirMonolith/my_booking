@@ -31,10 +31,24 @@ class BaseDAO:
     @classmethod
     async def add_object(cls, **kwargs):
         """Добавляет объект в БД."""
-        async with async_session_maker() as session:
-            query = insert(cls.model).values(**kwargs)
-            await session.execute(query)
-            await session.commit()
+        try:
+            async with async_session_maker() as session:
+                query = insert(cls.model).values(**kwargs)
+                await session.execute(query)
+                await session.commit()
+        except (SQLAlchemyError, Exception) as error:
+            if isinstance(error, SQLAlchemyError):
+                message = 'Database Exception'
+            elif isinstance(error, Exception):
+                message = 'Unknown Exception'
+            message += ': Не удается добавить данные.'
+
+            logger.error(
+                message,
+                extra={'table': cls.model.__tablename__},
+                exc_info=True
+            )
+            return None
 
     @classmethod
     async def delete_object(cls, **kwargs):
@@ -64,7 +78,7 @@ class BaseDAO:
                 message = 'Database Exception'
             elif isinstance(error, Exception):
                 message = 'Unknown Exception'
-            message += ': Cannot bulk insert data into table'
+            message += ': Не удается добавить данные.'
 
             logger.error(
                 message,

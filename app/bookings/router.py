@@ -29,7 +29,7 @@ async def add_booking(
     date_to: date = Query(
         ..., description=f'Например, {(datetime.now() + timedelta(days=7)).date()}'
     ),
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user)
 ):
     """Позволяет добавить бронирование."""
     if date_from > date_to:
